@@ -1,0 +1,241 @@
+public class Node{
+    Object val;
+    Node next;
+
+    public Node(Object v, Node n){
+        val = v;
+        next = n;
+    }
+}
+import java.io.ObjectInputValidation;
+
+public class ArrayStack implements Stack {
+  int size;
+  int top;
+  Object[] data;
+
+  public ArrayStack() {
+    size = 0;
+    top = -1;
+    data = new Object[5];
+  }
+
+  public int size() {
+    return size;
+  }
+
+  public boolean isEmpty() {
+    return size == 0;
+  }
+
+  public void push(Object e) throws StackOverflowException {
+    if (size < data.length) {
+      data[size] = e;
+      top = size;
+      size++;
+    } else
+      throw new StackOverflowException();
+  }
+
+  public Object pop() throws StackUnderflowException {
+    if (size == 0)
+      throw new StackUnderflowException();
+    else {
+      Object temp = data[top];
+      data[top] = null;
+      top--;
+      size--;
+      return temp;
+    }
+  }
+
+  public Object peek() throws StackUnderflowException {
+    if (size == 0)
+      throw new StackUnderflowException();
+    else
+      return data[top];
+  }
+
+  public String toString() {
+    if (size == 0)
+      return "Empty Stack";
+    String temp = "";
+    for (int i = top; i >= 0; i--) {
+      temp += data[i] + " ";
+    }
+    return temp;
+  }
+
+  public Object[] toArray() {
+    Object[] temp = new Object[size];
+    for (int i = 0, j = top; i < size; i++) {
+      temp[i] = data[j];
+      j--;
+    }
+    return temp;
+  }
+
+  public int search(Object e) {
+    int count = 0;
+    for (int i = top; i >= 0; i--) {
+      if (data[i].equals(e))
+        return count;
+      count++;
+    }
+    return -1;
+  }
+
+}
+public class ListStack implements Stack {
+  int size;
+  Node top;
+
+  public ListStack() {
+    size = 0;
+    top = null;
+  }
+
+  public int size() {
+    return size;
+  }
+
+  public boolean isEmpty() {
+    return size == 0;
+  }
+
+  public void push(Object e) throws StackOverflowException {
+    if (size == 0) {
+      top = new Node(e, null);
+      size++;
+    } else {
+      Node temp = new Node(e, top);
+      top = temp;
+      size++;
+    }
+  }
+
+  public Object pop() throws StackUnderflowException {
+    if (size == 0)
+      throw new StackUnderflowException();
+    else {
+      Object temp = top.val;
+      top = top.next;
+      size--;
+      return temp;
+    }
+  }
+
+  public Object peek() throws StackUnderflowException {
+    if (size == 0)
+      throw new StackUnderflowException();
+    else
+      return top.val;
+  }
+
+  public String toString() {
+    if (size == 0)
+      return "Empty Stack";
+    String test = "";
+    for (Node x = top; x != null; x = x.next) {
+      test += x.val + " ";
+    }
+    return test;
+  }
+
+  public Object[] toArray() {
+    Object[] temp = new Object[size];
+    Node x;
+    int i;
+    for (x = top, i = 0; x != null; x = x.next, i++) {
+      temp[i] = x.val;
+    }
+    return temp;
+  }
+
+  public int search(Object e) {
+    int count = 0;
+    for (Node x = top; x != null; x = x.next) {
+      if (x.val.equals(e))
+        return count;
+      count++;
+    }
+    return -1;
+  }
+}
+public interface Stack {
+    // The number of items on the stack
+    public int size();
+    // Returns true if the stack is empty
+    public boolean isEmpty();
+    // Pushes the new item on the stack, throwing the
+// StackOverflowException if the stack is at maximum capacity. It
+// does not throw an exception for an "unbounded" stack, which
+// dynamically adjusts capacity as needed.
+    public void push(Object e) throws StackOverflowException;
+    // Pops the item on the top of the stack, throwing the
+// StackUnderflowException if the stack is empty.
+    public Object pop() throws StackUnderflowException;
+    // Peeks at the item on the top of the stack, throwing
+// StackUnderflowException if the stack is empty.
+    public Object peek() throws StackUnderflowException;
+    // Returns a textual representation of items on the stack, in the
+// format "[ x y z ]", where x and z are items on top and bottom
+// of the stack respectively.
+    public String toString();
+    // Returns an array with items on the stack, with the item on top
+// of the stack in the first slot, and bottom in the last slot.
+    public Object[] toArray();
+    // Searches for the given item on the stack, returning the
+// offset from top of the stack if item is found, or -1 otherwise.
+    public int search(Object e);
+}
+public class StackOverflowException extends Exception{
+
+}
+public class StackUnderflowException extends Exception{
+
+}
+import java.text.BreakIterator;
+import java.util.Scanner;
+
+public class Tester {
+
+  public static void bracketChecker(Stack st, String[] tests) throws Exception {
+    for (int j = 0; j < tests.length; j++) {
+      char[] temp = tests[j].toCharArray();
+      for (int i = 0; i < temp.length; i++) {
+        if (temp[i] == '(' || temp[i] == '{' || temp[i] == '[')
+          st.push(temp[i]);
+        else if (temp[i] == ')' && !st.isEmpty() && st.peek().equals('('))
+          st.pop();
+        else if (temp[i] == '}' && !st.isEmpty() && st.peek().equals('{'))
+          st.pop();
+        else if (temp[i] == ']' && !st.isEmpty() && st.peek().equals('['))
+          st.pop();
+      }
+      System.out.println("\n" + tests[j]);
+      if (st.isEmpty())
+        System.out.println("This expression is correct.");
+      else
+        System.out.println("This expression is NOT correct.");
+      while (!st.isEmpty())
+        st.pop();
+    }
+  }
+
+  public static void main(String[] args) throws Exception {
+    String tester[] = { "1+2*(3/4)", "1+2*[3*3+{4–5(6(7/8/9)+10)–11+(12*8)]+14",
+        "1+2*[3*3+{4–5(6(7/8/9)+10)}–11+(12*8)/{13+13}]+14", "1+2]*[3*3+{4–5(6(7/8/9)+10)–11+(12*8)]+14" };
+
+    Stack stack1 = new ArrayStack();
+    System.out.println("\n\nThis is the results of the Array Based Stack implementation\n");
+    bracketChecker(stack1, tester);
+
+    Stack stack2 = new ListStack();
+    System.out.println("\n\nThis is the results of the List Based Stack implementation\n");
+    bracketChecker(stack2, tester);
+
+  }
+}
+
+

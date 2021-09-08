@@ -1,0 +1,264 @@
+public class ArrayManipulation {
+    public static void main(String[] args) {
+        int[] a = { 10, 20, 30, 40, 50, 60 };
+        int[] b;
+
+        System.out.println("///////////  Linear Array Problems  //////////////////\n");
+
+        System.out.println("\n/////***** TEST 01: Shift Left k cell result *****/////");
+        b = copyArray(a, a.length);
+        b = shiftLeft(b, 3);
+        printArray(b);
+
+        System.out.println("\n/////***** TEST 02: Rotate Left k cell result *****/////");
+        b = copyArray(a, a.length);
+        printArray(b);
+        b = rotateLeft(b, 3);
+        printArray(b);
+
+        System.out.println("\n/////***** TEST 03: Remove example *****/////");
+        b = copyArray(a, a.length);
+        printArray(b);
+        remove(b, 5, 2);
+        printArray(b);
+
+        System.out.println("\n/////***** TEST 04: Remove all example  *****/////");
+        int[] c = { 10, 2, 30, 2, 50, 2, 2, 0, 0 };
+        printArray(c);
+        removeAll(c, 7, 2);
+        printArray(c);
+
+        System.out.println("\n/////***** TEST 05: Split Array into Balanced Sub Arrays  *****/////");
+        int[] d = { 10, 3, 1, 2, 10 };
+        printArray(d);
+        boolean bol = splitArrayBalanced(d);
+        System.out.println("Splitting Array into balanced Sub Array is possible: " + bol);
+
+        System.out.println("\n/////***** TEST 06: Array Series  *****/////");
+        System.out.println("Array Series input parameter: 4");
+        int[] e = arraySeries(4);
+        printArray(e);
+
+        System.out.println("\n/////***** TEST 07: Max Bunch  *****/////");
+        int[] f = { 1, 1, 2, 2, 1, 1, 1, 1 };
+        printArray(f);
+        int maxbunch = maxBunch(f);
+        System.out.println("The max bunch count for this given array is " + maxbunch);
+
+        System.out.println("\n/////***** TEST 07: Max Bunch  *****/////");
+        int[] g = { 4, 5, 6, 6, 4, 3, 6, 4 };
+        printArray(g);
+        System.out.println("Repetition method result: " + repetition(g));
+        int[] h = { 3, 4, 6, 3, 4, 7, 4, 6, 8, 6, 6 };
+        printArray(h);
+        System.out.println("Repetition method result: " + repetition(h));
+
+        System.out.println("\n\n///////////  Circular Array Problems  //////////////////\n");
+
+        System.out.println("\n/////***** TEST 01: Circular Array Palindrome Checker  *****/////");
+        int[] circularArray1 = { 20, 10, 0, 0, 0, 10, 20, 30 };
+        printArray(circularArray1);
+        System.out.println("The given array is a palindrome: " + palindrome(circularArray1, 5, 5));
+        int[] circularArray2 = { 10, 20, 0, 0, 0, 10, 20, 30 };
+        printArray(circularArray2);
+        System.out.println("The given array is a palindrome: " + palindrome(circularArray2, 5, 5));
+
+        System.out.println("\n/////***** TEST 02: Circular Array Intersection  *****/////");
+        int[] circularArray3 = { 40, 50, 0, 0, 0, 10, 20, 30 };
+        printArray(circularArray3);
+        int[] circularArray4 = { 10, 20, 5, 0, 0, 0, 0, 0, 5, 40, 15, 25 };
+        printArray(circularArray4);
+        int[] resultOfIntersection = intersection(circularArray3, circularArray4, 5, 8, 5, 7);
+        System.out.print("result of the intersection:  ");
+        printArrays(resultOfIntersection);
+    }
+
+    public static void printArray(int[] source) {
+        for (int i = 0; i < source.length - 1; i++) {
+            System.out.print(source[i] + ", ");
+        }
+        System.out.printf("%d\n", source[source.length - 1]);
+    }
+
+    public static void printArrays(int[] source) {
+        System.out.print(source[0]);
+        for (int i = 1; i < source.length; i++) {
+            if (source[i] == 0)
+                break;
+            System.out.print(", " + source[i]);
+        }
+        System.out.println();
+    }
+
+    public static int[] copyArray(int[] source, int len) {
+        int[] cArray = new int[len];
+        for (int i = 0; i < len; i++) {
+            cArray[i] = source[i];
+        }
+        return cArray;
+    }
+
+    // Shifts all the elements of the source array to the left by 'k' positions and
+    // returns the udpated array
+    public static int[] shiftLeft(int[] source, int k) {
+        for (int i = 0; i < source.length - k; i++) {
+            source[i] = source[i + k];
+        }
+        for (int j = 0; j < k; j++) {
+            source[source.length - 1 - j] = 0;
+        }
+        return source;
+    }
+
+    // Rotates all the elements of the source array to the left by 'k' positions and
+    // return the updated array
+    public static int[] rotateLeft(int[] source, int k) {
+        int temp[] = new int[k];
+        for (int j = 0; j < k; j++) {
+            temp[j] = source[j];
+        }
+        for (int i = 0; i < source.length - k; i++) {
+            source[i] = source[i + k];
+        }
+        for (int j = k, i = 0; j < source.length; j++, i++) {
+            source[j] = temp[i];
+        }
+        return source;
+    }
+
+    public static boolean remove(int[] arr, int size, int idx) {
+        boolean remove = false;
+        if (idx >= size || idx < 0) {
+            System.err.println("Invalid index given for removal operation");
+            return remove;
+        }
+        for (int i = idx; i < size - 1; i++) {
+            arr[i] = arr[i + 1];
+        }
+        arr[size] = 0;
+        size--;
+        remove = true;
+
+        return remove;
+    }
+
+    public static boolean removeAll(int[] arr, int size, int elem) {
+        boolean remove = false;
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] == elem) {
+                remove = true;
+                for (int j = i; j < arr.length - 1; j++) {
+                    arr[j] = arr[j + 1];
+                }
+                arr[size - 1] = 0;
+                size--;
+                i--;
+            }
+        }
+        return remove;
+    }
+
+    public static boolean splitArrayBalanced(int[] arr) {
+        int sum1 = 0, sum2 = 0;
+        for (int i = 0; i < arr.length - 1; i++) {
+            sum1 = 0;
+            sum2 = 0;
+            for (int j = 0; j <= i; j++) {
+                sum1 += arr[j];
+            }
+            for (int k = i + 1; k < arr.length; k++) {
+                sum2 += arr[k];
+            }
+            if (sum1 == sum2)
+                return true;
+        }
+        return false;
+    }
+
+    public static int[] arraySeries(int n) {
+        int[] newArr = new int[n * n];
+        int m = 0;
+        for (int i = 1; i <= n; i++) {
+            for (int j = n - i; j > 0; j--) {
+                newArr[m] = 0;
+                ++m;
+            }
+            for (int k = 1; k <= i; k++) {
+                newArr[m] = k;
+                ++m;
+            }
+        }
+        return newArr;
+    }
+
+    public static int maxBunch(int[] arr) {
+        int maxBunch = 0;
+        for (int i = 1; i < arr.length; i++) {
+            int count = 0;
+            if (arr[i] == arr[i - 1]) {
+                count = 2;
+                ++i;
+                while ((i < arr.length) && (arr[i] == arr[i - 1])) {
+                    ++i;
+                    ++count;
+                }
+                if (count > maxBunch)
+                    maxBunch = count;
+                --i;
+            }
+        }
+        return maxBunch;
+    }
+
+    public static boolean repetition(int[] arr) {
+        int[] frequency = new int[10];
+
+        for (int i = 0; i < arr.length; i++) {
+            frequency[arr[i]]++;
+        }
+
+        for (int j = frequency.length - 1; j >= 1; j--) {
+            for (int k = 0; k < j; k++) {
+                if (frequency[j] == frequency[k] && frequency[j] > 1 && frequency[k] > 1) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean palindrome(int[] cir, int start, int size) {
+        int i = start;
+        int j = (start + size - 1) % cir.length;
+
+        for (int k = 0; k < size / 2; k++) {
+            if (cir[i] != cir[j])
+                return false;
+            i = (i + 1) % cir.length;
+            j = j - 1;
+            if (j < 0)
+                j = cir.length - 1;
+        }
+        return true;
+    }
+
+    public static int[] intersection(int[] cir1, int[] cir2, int start_1, int start_2, int size_1, int size_2) {
+        int[] intersection;
+        if (size_1 < size_2)
+            intersection = new int[size_1];
+        else
+            intersection = new int[size_2];
+
+        int m = 0;
+        for (int i = 0; i < size_1; i++) {
+            for (int j = 0; j < size_2; j++) {
+                if (cir1[(start_1 + i) % cir1.length] == cir2[(start_2 + j) % cir2.length]) {
+                    intersection[m] = cir1[(start_1 + i) % cir1.length];
+                    ++m;
+                }
+            }
+        }
+        return intersection;
+    }
+
+}

@@ -1,0 +1,567 @@
+public class Task01{
+    
+    static void selectionSort(int[] arr, int pos){
+        if (pos >= arr.length-1) return;
+        
+        int m= minIndex(arr, pos);
+        if (m != pos){
+            int temp= arr[m];
+            arr[m]= arr[pos];
+            arr[pos]= temp;
+        }
+        selectionSort(arr, pos+1);
+    }
+    
+    
+    static int minIndex(int[] temp, int i){
+        if (i == temp.length-1) return i;
+        
+        int k= minIndex( temp, i+1);
+        
+        if (temp[i] < temp[k]) return i;
+        else return k;
+    }
+    
+   
+    public static void main (String[] args){
+        int[] num= {46, 56, 48, 59, 12, 23, 50, 79, 95, 42, 13, 35, 67, 91, 65};
+        selectionSort( num, 0);
+        
+        for (int i=0; i<num.length; i++){
+            System.out.print(num[i]+" ");
+        }
+        System.out.println();
+    }
+}
+public class Task02{
+    
+    static void insertionSort(int arr[], int n){
+        if (n < 1)   return;
+        
+        insertionSort( arr, n-1 );
+        swapIndex(arr, n-1);
+    }
+    
+    static void swapIndex(int[] arr, int i){
+        if ( i<0 ) return;
+        if (arr[i] > arr[i+1]){
+            int temp= arr[i+1];
+            arr[i+1]= arr[i];
+            arr[i]= temp;
+            swapIndex(arr, i-1);
+        } 
+    }
+    
+    
+    public static void main (String[] args){
+        int[] num= {26, 16, 12, 10, 9, 7, 5, 4, 3, 2, 1};
+        insertionSort( num, num.length-1);
+        
+        for (int i=0; i<num.length; i++){
+            System.out.print(num[i]+" ");
+        }
+        System.out.println();
+    }
+}
+public class Node{
+  public Object element;
+  public Node next;
+  
+  public Node(Object e, Node n){
+    element =e ;
+    next = n;
+    
+  }
+  
+}
+public class LinkedList{
+  public Node head;
+  
+  
+  /* First Constructor:
+   * Creates a linked list using the values from the given array. head will refer
+   * to the Node that contains the element from a[0]
+   */ 
+  public LinkedList(Object [] a){
+      head = new Node(a[0], null);
+      Node tail= head;
+      for (int i=1; i<a.length; i++){
+          Node temp= new Node (a[i], null);
+          tail.next=temp;
+          tail=tail.next;
+      }
+  }
+  
+  /* Second Constructor:
+   * Sets the value of head. head will refer
+   * to the given LinkedList
+   */
+  public LinkedList(Node h)
+  {
+    head=h;
+  }
+  
+  /* Counts the number of Nodes in the list */
+  public int countNode(){
+      int count=0;
+      for (Node x=head; x!=null; x=x.next){
+          count++;
+      }
+      return count; // please remove this line!
+  }
+  
+  /* prints the elements in the list */
+  public void printList(){
+      Node x;
+      for (x=head; x.next!=null; x=x.next){
+          System.out.print(x.element+", ");
+      }
+      System.out.println(x.element+".");
+  }
+  
+  // returns the reference of the Node at the given index. For invalid index return null.
+  public Node nodeAt(int idx){
+      Node x=head;
+      if (idx<0) {
+          return null;
+      }
+      else {
+          int count = 0;
+          for (x = head; x!=null; x = x.next, count++){
+              if (count==idx)
+                  return x;
+          }
+      }
+      return null;
+  }
+  
+  
+// returns the element of the Node at the given index. For invalid idx return null.
+  public Object get(int idx){
+      Node x;
+      if (idx<0) {
+          return null;
+      }
+      else {
+          int count = 0;
+          for (x = head; x!=null; x = x.next, count++){
+              if (count==idx)
+                  return x.element;
+          }
+      }
+      return null;
+  }
+  
+  
+  
+  /* updates the element of the Node at the given index. 
+   * Returns the old element that was replaced. For invalid index return null.
+   * parameter: index, new element
+   */
+  public Object set(int idx, Object elem){
+      Node x;
+      Object temp=null;
+      if (idx<0) {
+          return null;
+      }
+      else{
+          int count = 0;
+          for (x = head; x!=null; x = x.next, count++) {
+              if (count == idx) {
+                  temp = x.element;
+                  x.element = elem;
+                  return temp;
+              }
+          }
+      }
+    return null; // please remove this line!
+  }
+  
+  
+  /* returns the index of the Node containing the given element.
+   if the element does not exist in the List, return -1.
+   */
+  public int indexOf(Object elem){
+      Node x;
+      int index=0;
+      for(x=head; x!=null; x=x.next, index++){
+          if (x.element==elem){
+              return index;
+          }
+      }
+    return -1; // please remove this line!
+  }
+  
+  // returns true if the element exists in the List, return false otherwise.
+  public boolean contains(Object elem){
+      Node x;
+      for(x=head; x!=null; x=x.next){
+          if (x.element==elem){
+              return true;
+          }
+      }
+    return false; // please remove this line!
+  }
+
+  // Makes a duplicate copy of the given List. Returns the reference of the duplicate list.
+  public Node copyList(){
+      Node copyHead= null;
+      Node copyTail= null;
+      Node x;
+      for (x=head; x!=null; x=x.next){
+          Node temp= new Node(x.element, null);
+          if (copyHead==null){
+              copyHead= temp;
+              copyTail= copyHead;
+          }
+          else{
+              copyTail.next=temp;
+              copyTail=copyTail.next;
+          }
+      }
+    return copyHead; // please remove this line!
+  }
+  
+  // Makes a reversed copy of the given List. Returns the head reference of the reversed list.
+  public Node reverseList(){
+      Node x=head;
+      Node rHead= new Node(head.element, null), temp;
+      for (x=head.next; x!=null; x=x.next){
+          rHead= new Node(x.element, rHead);
+      }
+      return rHead; // please remove this line!
+  }
+  
+  /* inserts Node containing the given element at the given index
+   * Check validity of index.
+   */
+  public void insert(Object elem, int idx){
+      Node x=head;
+      if (idx<0) {
+      }
+      else{
+          Node temp= new Node (elem, null);
+          if (idx==0){
+              temp.next=x;
+              head=temp;
+          }
+          else if(idx==countNode()){
+              for(x=head; x.next!=null; x=x.next){
+              }
+              x.next=temp;
+              temp.next=null;
+          }
+          else{
+              Node previous= nodeAt(idx-1);
+              temp.next=previous.next;
+              previous.next=temp;
+          }
+      }
+  }
+  
+  
+  /* removes Node at the given index. returns element of the removed node.
+   * Check validity of index. return null if index is invalid.
+   */
+  public Object remove(int index){
+      Object temp=null;
+      if (index<0){
+          return null;
+      }
+      else{
+          Node rNode=null;
+          if (index==0){
+              rNode=head;
+              temp=head.element;
+              head=head.next;
+          }
+          else {
+              Node previous=nodeAt(index-1);
+              rNode=previous.next;
+              temp=rNode.element;
+              previous.next=rNode.next;
+          }
+          rNode.element=null;
+          rNode.next=null;
+          return temp;
+      }
+  }
+  
+  // Rotates the list to the left by 1 position.
+  public void rotateLeft(){
+      Node x=head;
+      Node temp=head;
+      for (x=head; x.next!=null; x=x.next){
+      }
+      head=head.next;
+      x.next=temp;
+      temp.next=null;
+  }
+  
+  // Rotates the list to the right by 1 position.
+  public void rotateRight(){
+      Node previous=null;
+      Node tail=head;
+      while (tail.next!=null){
+          previous=tail;
+          tail=tail.next;
+      }
+      tail.next=head;
+      head=tail;
+      previous.next=null;
+  }
+}
+public class Task03{
+// bubble sort on singly linked list
+    public static void main(String[] args){
+        Object[] num= {29, 11, 33, 14, 16, 22, 8, 48, 51, 37};
+        LinkedList list= new LinkedList(num);
+        list.printList();
+        
+        int length= list.countNode();
+        Object temp;
+        
+        for (int i=0; i<length; i++){
+            Node x=list.head;
+            for ( ; x.next!=null; x=x.next){
+                if ((Integer)x.element > (Integer)x.next.element){
+                    temp= x.element;
+                    x.element= x.next.element;
+                    x.next.element= temp;
+                }
+            }
+        }
+        System.out.println("After applying bubble sort");
+        list.printList();
+    }
+}
+
+public class Task04{
+// selection sort on singly linked list
+    public static void main(String[] args){
+        Object[] num= {29, 11, 33, 14, 16, 22, 8, 48, 51, 37};
+        LinkedList list= new LinkedList(num);
+        list.printList();
+        
+        int length= list.countNode();
+        Object min;
+        Node minNode= null;
+        
+        for (Node x= list.head; x.next!=null; x=x.next){
+            min= x.element;
+            minNode= x;
+            for (Node y= x.next; y!=null; y=y.next){
+                if ((Integer)min > (Integer)y.element){
+                    min= y.element;
+                    minNode= y;
+                }
+            }
+            minNode.element= x.element;
+            x.element= min;
+        }
+        System.out.println("After applying selection sort: ");
+        list.printList();
+    }
+}
+/////////////////////////////Task5///////////
+public class Node{
+  public Object element;
+  public Node next;
+  public Node prev;
+  
+  public Node(Object e, Node n, Node p){
+    element =e ;
+    next = n;
+    prev =p;
+    
+  }
+  
+}
+public class DoublyList{
+    public Node head;
+    
+    
+    /* First Constructor:
+     * Creates a linked list using the values from the given array. head will refer
+     * to the Node that contains the element from a[0]
+     */ 
+    public DoublyList(Object [] a){
+        head = new Node(a[0], null, null);
+        Node tail = head;
+        
+        for(int i = 1; i<a.length; i++){
+            Node mn = new Node(a[i], null, null);
+            tail.next = mn;
+            mn.prev=tail;
+            tail=tail.next;
+        }
+    }
+    
+    /* Second Constructor:
+     * Sets the value of head. head will refer
+     * to the given LinkedList
+     */
+    public DoublyList(Node h){
+        head = h;
+    }
+    
+    /* Counts the number of Nodes in the list */
+    public int countNode(){
+        int count=0;
+        for (Node x=head; x!=null; x=x.next){
+            count++;
+        }
+        return count; // please remove this line!
+    }
+    
+    /* prints the elements in the list */
+    public void forwardprint(){
+        Node x;
+        for (x=head; x.next!=null; x=x.next){
+            System.out.print(x.element+", ");
+        }
+        System.out.println(x.element+".");
+    }
+    
+    public void backwardprint(){
+        Node x;
+        for (x=head; x.next!=null; x=x.next);
+        for ( ; x.prev!=head; x=x.prev){
+            System.out.print(x.element+", ");
+        }
+        System.out.println(x.element+".");
+    }
+    
+    
+    // returns the reference of the Node at the given index. For invalid index return null.
+    public Node nodeAt(int idx){
+        int count=0;
+        Node x;
+        for (x=head; x!=null; x=x.next){
+            if ( count == idx){
+                return x;
+            }
+            count++;
+        }
+        return null; // please remove this line!
+    }
+    
+    
+    
+    /* returns the index of the Node containing the given element.
+     if the element does not exist in the List, return -1.
+     */
+    public int indexOf(Object elem){
+        Node x;
+        int count=0;
+        for (x=head; x!=null; x=x.next){
+            if (x.element==elem){
+                return count;
+            }
+            count++;
+        }
+        return -1; // please remove this line!
+    }
+    
+    
+    
+    /* inserts Node containing the given element at the given index
+     * Check validity of index.
+     */
+    public void insert(Object elem, int idx){
+       Node x;
+       Node temp= new Node (elem, null, null);
+       if (idx==0){
+           temp.next=head;
+           head.prev=temp;
+           head=temp;
+       }
+       else{
+           Node pre= nodeAt(idx-1);
+           temp.next=pre.next;
+           pre.next.prev=temp;
+           pre.next=temp;
+           temp.prev=pre;
+       }
+    }
+    
+    
+    
+    
+    /* removes Node at the given index. returns element of the removed node.
+     * Check validity of index. return null if index is invalid.
+     */
+    public Object remove(int index){
+        Object temp= null;
+        if (index==0){
+            temp=head.element;
+            head = head.next;
+            head.prev = null;
+        }
+        else {
+            Node pre= nodeAt(index-1);
+            temp=pre.next.element;
+            pre.next=pre.next.next;
+            pre.next.prev=pre;
+        }
+        return temp; // please remove this line!
+    }
+    
+}
+public class Task05{
+// insertion sort on doubly linked list
+    public static void main (String[] args){
+        Object[] num= {29, 11, 33, 14, 16, 22, 8, 48, 51, 37};
+        DoublyList list= new DoublyList(num);
+        list.forwardprint();
+        
+        Object key;
+        Node x, y;
+        
+        for (x=list.head.next; x!=null; x=x.next){
+            for (y=x.prev; y!= null; y=y.prev){
+                if ((Integer)y.element <= (Integer)y.next.element) break;
+                key= y.element;
+                y.element= y.next.element;
+                y.next.element= key;
+            }
+        }
+        System.out.println("After applying insertion sort: ");
+        list.forwardprint();
+    }
+}
+public class Task06{
+    
+    static int binSearch(int[] arr, int st, int end, int key){
+        int mid= (st+end)/2;
+        if (key == arr[mid]) return mid;
+        else if (key < arr[mid]) return binSearch(arr, st, mid-1, key);
+        else return binSearch(arr, mid+1, end, key);
+    }
+    
+    public static void main (String[] args){
+        int[] num= {8, 11, 14, 16, 22, 29, 33, 37, 48, 51};
+        
+        System.out.println(binSearch(num, 0, num.length-1, 22));
+    }
+}
+import java.util.Scanner;
+import java.util.Map;
+import java.util.TreeMap;
+public class Task07{
+    static Map<Integer, Integer> memo= new TreeMap<Integer, Integer>();
+    
+    static int memoizedFib(int n){
+        if (n<2) return n;
+        else if (memo.get(n)==null) memo.put(n, memoizedFib(n-1)+memoizedFib(n-2));
+        return memo.get(n);
+    }
+    
+    public static void main (String[] args){
+        Scanner sc= new Scanner (System.in);
+        System.out.println("Please enter the value of the n-th term whose fibonacci value is to be found out:");
+        int n= sc.nextInt();
+        sc.close();
+        System.out.println("the fibonacci value of " + n + "th term is "+ memoizedFib(n));
+    }
+}
